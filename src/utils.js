@@ -9,12 +9,20 @@ const sleep = (ms) => {
 const toSnakeCase = (obj) => {
     const result = {};
     Object.keys(obj).forEach((key) => {
+        const target = obj[key];
 
-        const target = obj[key]
-        if (_.isPlainObject(target)) {
+        if (_.isArray(target)) {
+            const newArray = [];
+
+            target.forEach((item) => {
+                if (_.isPlainObject(item)) newArray.push(toSnakeCase(item));
+                else newArray.push(item);
+            });
+
+            result[_.snakeCase(key)] = newArray;
+        } else if (_.isPlainObject(target)) {
             result[_.snakeCase(key)] = toSnakeCase(target, result);
-        }
-        else {
+        } else {
             result[_.snakeCase(key)] = target;
         }
     });

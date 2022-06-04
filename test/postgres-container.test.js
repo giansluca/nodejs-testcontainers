@@ -1,6 +1,6 @@
 const { getPostgresClient } = require("./setup/postgres-setup");
 const { types } = require("pg");
-const fs = require('fs');
+const fs = require("fs");
 const path = require("path");
 
 let postgresClient;
@@ -40,9 +40,16 @@ describe.skip("Test Postgres container", () => {
         const expectedId = "id-1";
         const expectedOwnerId = "owner-1";
         const expectedAmount = 125.65;
+
         const insertRow =
             "INSERT INTO test_table(id, owner_id, transaction_date, amount, description) VALUES($1, $2, $3, $4, $5) RETURNING *";
-        const insertRowValues = [expectedId, expectedOwnerId, new Date(), expectedAmount, "pagamento salmone affumicato"];
+        const insertRowValues = [
+            expectedId,
+            expectedOwnerId,
+            new Date(),
+            expectedAmount,
+            "pagamento salmone affumicato",
+        ];
 
         await postgresClient.query(insertRow, insertRowValues);
 
@@ -64,7 +71,7 @@ describe.skip("Test Postgres container", () => {
 
 setUpPostgresData = async () => {
     try {
-        const sqlInitScript = loadSqlInitScript()
+        const sqlInitScript = loadSqlInitScript();
 
         await postgresClient.query("BEGIN");
         postgresClient.query(sqlInitScript);
@@ -77,5 +84,5 @@ setUpPostgresData = async () => {
 
 loadSqlInitScript = () => {
     const sqlInitScript = fs.readFileSync(path.join(__dirname, "setup/sql/init-postgres.sql"), "utf8");
-    return sqlInitScript
-}
+    return sqlInitScript;
+};
