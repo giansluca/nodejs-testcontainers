@@ -1,0 +1,27 @@
+{
+  "name": "nodejs-testcontainers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest ./test",
+    "coverage": "rm -rf coverage && jest ./test --coverage",
+    "lint": "eslint src",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.16.0",
+    "jest": "^28.1.0",
+    "prettier": "^2.6.2",
+    "testcontainers": "^8.10.1"
+  },
+  "dependencies": {
+    "@elastic/elasticsearch": "^8.2.1",
+    "dotenv": "^16.0.1",
+    "lodash": "^4.17.21",
+    "pg": "^8.7.3"
+  }
+}
