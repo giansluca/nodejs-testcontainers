@@ -7,25 +7,26 @@ const sleep = (ms) => {
 };
 
 const toSnakeCase = (obj) => {
-    const result = {};
-    Object.keys(obj).forEach((key) => {
-        const target = obj[key];
+    let result;
+    if (_.isArray(obj)) {
+        result = [];
 
-        if (_.isArray(target)) {
-            const newArray = [];
+        obj.forEach((item) => {
+            if (_.isPlainObject(item) || _.isArray(item)) result.push(toSnakeCase(item));
+            else result.push(item);
+        });
+    } else if (_.isPlainObject(obj)) {
+        result = {};
 
-            target.forEach((item) => {
-                if (_.isPlainObject(item)) newArray.push(toSnakeCase(item));
-                else newArray.push(item);
-            });
-
-            result[_.snakeCase(key)] = newArray;
-        } else if (_.isPlainObject(target)) {
-            result[_.snakeCase(key)] = toSnakeCase(target, result);
-        } else {
-            result[_.snakeCase(key)] = target;
-        }
-    });
+        Object.keys(obj).forEach((key) => {
+            const target = obj[key];
+            if (_.isPlainObject(target) || _.isArray(target)) {
+                result[_.snakeCase(key)] = toSnakeCase(target, result);
+            } else {
+                result[_.snakeCase(key)] = target;
+            }
+        });
+    } else throw new Error("It should never gets here!");
 
     return result;
 };

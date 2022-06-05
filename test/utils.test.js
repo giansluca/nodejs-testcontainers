@@ -79,6 +79,11 @@ describe("Test snake camel case converter", () => {
                     {
                         languageName: "english",
                         score: 8,
+                        nestedList: [
+                            {
+                                thisIsVeryNested: true,
+                            },
+                        ],
                     },
                     {
                         languageName: "spanish",
@@ -91,8 +96,8 @@ describe("Test snake camel case converter", () => {
         };
 
         // when
+        console.log(util.inspect(underTest, { depth: null }));
         const result = toSnakeCase(underTest);
-
         console.log(util.inspect(result, { depth: null }));
 
         // then
@@ -102,5 +107,44 @@ describe("Test snake camel case converter", () => {
         expect(result.user_details.language_list[1][expectedSnakeLanguageName]).toBe("spanish");
         expect(result.user_details.language_list[2]).toBe("test-string");
         expect(result.user_details.language_list[3]).toBe(101);
+        expect(result.user_details.language_list[0].nested_list[0].this_is_very_nested).toBeTruthy();
+    });
+
+    it("should convert array with nested mixed elements from camel to snake", async () => {
+        // given
+        underTest = [
+            {
+                mainCity: "Rome",
+                dateOfBirth: "1992-07-21",
+                nestedOne: {
+                    nestedTwo: true,
+                    nestedThree: [1, { nestedFour: true }],
+                },
+            },
+            {
+                mainCity: "Milan",
+                dateOfBirth: "1988-05-10",
+                nestedArray: [3, 4, 5],
+            },
+            200,
+            "test-string",
+            [1, 2, 3, { nestedObj: "yes" }],
+        ];
+
+        // when
+        console.log(util.inspect(underTest, { depth: null }));
+        const result = toSnakeCase(underTest);
+        console.log(util.inspect(result, { depth: null }));
+
+        // then
+        expect(result[0].date_of_birth).toBe("1992-07-21");
+        expect(result[0].nested_one.nested_two).toBeTruthy();
+        expect(result[0].nested_one.nested_three[1].nested_four).toBeTruthy();
+        expect(result[1].date_of_birth).toBe("1988-05-10");
+        expect(result[2]).toBe(200);
+        expect(result[3]).toBe("test-string");
+        expect(result[4].length).toBe(4);
+        expect(result[4][2]).toBe(3);
+        expect(result[4][3].nested_obj).toBe("yes");
     });
 });

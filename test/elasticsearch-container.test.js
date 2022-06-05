@@ -1,5 +1,7 @@
 const { getElasticClient } = require("./setup/elasticsearch-setup");
-const { sleep } = require("../src/utils");
+const { sleep, toSnakeCase } = require("../src/utils");
+const fs = require("fs");
+const path = require("path");
 
 const INDEX = "test-index";
 let elasticClient;
@@ -22,7 +24,7 @@ afterAll(async () => {
     }
 });
 
-describe.skip("Test Elasticsearch container", () => {
+describe("Test Elasticsearch container", () => {
     it("should get all indexes", async () => {
         // given
         // when
@@ -116,8 +118,8 @@ describe.skip("Test Elasticsearch container", () => {
 
         const newTransaction = {
             id: idNew,
-            owner_id: "ow-3",
-            transaction_date: "2022-04-19",
+            ownerId: "ow-3",
+            transactionDate: "2022-04-19",
             amount: 99,
             description: "Merluzzetti",
         };
@@ -125,7 +127,7 @@ describe.skip("Test Elasticsearch container", () => {
         await elasticClient.index({
             index: INDEX,
             id: newTransaction.id,
-            document: newTransaction,
+            document: toSnakeCase(newTransaction),
         });
 
         // when
@@ -139,6 +141,8 @@ describe.skip("Test Elasticsearch container", () => {
         // then
         expect(transaction).toBeDefined();
         expect(transaction.id).toBe(idNew);
+        expect(transaction.owner_id).toBe("ow-3");
+        expect(transaction.transaction_date).toBe("2022-04-19");
         expect(transaction.amount).toBe(99);
     });
 
@@ -191,37 +195,21 @@ describe.skip("Test Elasticsearch container", () => {
 });
 
 const setUpElasticData = async () => {
-    transactions = [
-        {
-            id: "id-1",
-            owner_id: "ow-1",
-            transaction_date: "2022-02-11",
-            amount: -270,
-            description: "Pagamento canna da pesca",
-        },
-        {
-            id: "id-2",
-            owner_id: "ow-1",
-            transaction_date: "2022-03-21",
-            amount: 150,
-            description: "Incasso vendita 15 orate",
-        },
-        {
-            id: "id-3",
-            owner_id: "ow-3",
-            transaction_date: "2022-04-17",
-            amount: 25,
-            description: "Vendita retino",
-        },
-    ];
+    const transactions = JSON.parse(loadElasticInitFile());
+    const snakeCaseTransactions = toSnakeCase(transactions);
 
-    for (const t of transactions) {
+    for (const t of snakeCaseTransactions) {
         await elasticClient.index({
             index: INDEX,
             id: t.id,
             document: t,
         });
     }
+};
+
+loadElasticInitFile = () => {
+    const jsonInitFile = fs.readFileSync(path.join(__dirname, "setup/init-files/init-elastic.json"), "utf8");
+    return jsonInitFile;
 };
 
 const clearElasticData = async () => {

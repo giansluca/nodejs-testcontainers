@@ -1,0 +1,23 @@
+[
+    {
+        "id": "id-1",
+        "ownerId": "ow-1",
+        "transactionDate": "2022-02-11",
+        "amount": -270,
+        "description": "Pagamento canna da pesca"
+    },
+    {
+        "id": "id-2",
+        "ownerId": "ow-1",
+        "transactionDate": "2022-03-21",
+        "amount": 150,
+        "description": "Incasso vendita 15 orate"
+    },
+    {
+        "id": "id-3",
+        "ownerId": "ow-3",
+        "transactionDate": "2022-04-17",
+        "amount": 25,
+        "description": "Vendita retino"
+    }
+]

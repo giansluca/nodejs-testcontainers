@@ -71,10 +71,10 @@ describe.skip("Test Postgres container", () => {
 
 setUpPostgresData = async () => {
     try {
-        const sqlInitScript = loadSqlInitScript();
+        const sqlInitFile = loadPostgresInitFile();
 
         await postgresClient.query("BEGIN");
-        postgresClient.query(sqlInitScript);
+        postgresClient.query(sqlInitFile);
         await postgresClient.query("COMMIT");
     } catch (e) {
         await postgresClient.query("ROLLBACK");
@@ -82,7 +82,7 @@ setUpPostgresData = async () => {
     }
 };
 
-loadSqlInitScript = () => {
-    const sqlInitScript = fs.readFileSync(path.join(__dirname, "setup/sql/init-postgres.sql"), "utf8");
-    return sqlInitScript;
+loadPostgresInitFile = () => {
+    const sqlInitFile = fs.readFileSync(path.join(__dirname, "setup/init-files/init-postgres.sql"), "utf8");
+    return sqlInitFile;
 };
