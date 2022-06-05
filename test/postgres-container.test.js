@@ -14,6 +14,7 @@ beforeAll(async () => {
         console.log(e);
     }
 });
+
 afterAll(async () => {
     try {
         postgresClient.end();
@@ -69,7 +70,7 @@ describe.skip("Test Postgres container", () => {
     });
 });
 
-setUpPostgresData = async () => {
+const setUpPostgresData = async () => {
     try {
         const sqlInitFile = loadPostgresInitFile();
 
@@ -82,7 +83,7 @@ setUpPostgresData = async () => {
     }
 };
 
-loadPostgresInitFile = () => {
+const loadPostgresInitFile = () => {
     const sqlInitFile = fs.readFileSync(path.join(__dirname, "setup/init-files/init-postgres.sql"), "utf8");
     return sqlInitFile;
 };

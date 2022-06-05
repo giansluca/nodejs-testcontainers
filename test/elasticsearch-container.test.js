@@ -207,7 +207,7 @@ const setUpElasticData = async () => {
     }
 };
 
-loadElasticInitFile = () => {
+const loadElasticInitFile = () => {
     const jsonInitFile = fs.readFileSync(path.join(__dirname, "setup/init-files/init-elastic.json"), "utf8");
     return jsonInitFile;
 };
