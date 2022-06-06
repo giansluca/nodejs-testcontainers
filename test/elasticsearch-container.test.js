@@ -25,7 +25,7 @@ afterAll(async () => {
     }
 });
 
-describe("Test Elasticsearch container", () => {
+describe.skip("Test Elasticsearch container", () => {
     it("should check index has been created", async () => {
         // given
         // when
@@ -53,7 +53,6 @@ describe("Test Elasticsearch container", () => {
         expect(properties.amount.type).toBe("long")
         expect(properties.owner_id.type).toBe("text")
         expect(properties.transaction_date.type).toBe("date")
-
     });
 
     it("should get by id", async () => {
