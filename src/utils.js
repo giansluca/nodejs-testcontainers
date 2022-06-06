@@ -6,6 +6,14 @@ const sleep = (ms) => {
     });
 };
 
+const formatDate = (date) => {
+    return [date.getFullYear(), _padTo2Digits(date.getMonth() + 1), _padTo2Digits(date.getDate())].join("-");
+};
+
+const _padTo2Digits = (num) => {
+    return num.toString().padStart(2, "0");
+};
+
 const toSnakeCase = (obj) => {
     let result;
     if (_.isArray(obj)) {
@@ -31,4 +39,4 @@ const toSnakeCase = (obj) => {
     return result;
 };
 
-module.exports = { sleep, toSnakeCase };
+module.exports = { sleep, formatDate, toSnakeCase };

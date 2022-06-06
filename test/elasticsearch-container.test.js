@@ -1,7 +1,8 @@
 const { getElasticClient } = require("./setup/elasticsearch-setup");
-const { sleep, toSnakeCase } = require("../src/utils");
+const { sleep, formatDate, toSnakeCase } = require("../src/utils");
 const fs = require("fs");
 const path = require("path");
+const util = require("util");
 
 const INDEX = "test-index";
 let elasticClient;
@@ -25,7 +26,7 @@ afterAll(async () => {
 });
 
 describe("Test Elasticsearch container", () => {
-    it("should get all indexes", async () => {
+    it("should check index has been created", async () => {
         // given
         // when
         const indices = await elasticClient.cat.indices({ format: "json" });
@@ -34,6 +35,25 @@ describe("Test Elasticsearch container", () => {
         // then
         expect(indices.length).toBe(1);
         expect(exist).toBeTruthy();
+    });
+
+    it("should have created the correct index mapping", async () => {
+        // given
+        // when
+        const mapping = await elasticClient.indices.getMapping({
+            index: INDEX,
+        });
+
+        console.log(util.inspect(mapping, { depth: null }));
+        const properties = mapping[INDEX].mappings.properties;
+        
+        // then
+        expect(properties.id.type).toBe("text")
+        expect(properties.description.type).toBe("text")
+        expect(properties.amount.type).toBe("long")
+        expect(properties.owner_id.type).toBe("text")
+        expect(properties.transaction_date.type).toBe("date")
+
     });
 
     it("should get by id", async () => {
@@ -51,6 +71,9 @@ describe("Test Elasticsearch container", () => {
         // then
         expect(transaction).toBeDefined();
         expect(transaction.id).toBe(expectedId);
+        expect(transaction.owner_id).toBe("ow-1");
+        expect(transaction.transaction_date).toBe("2022-02-11");
+        expect(transaction.amount).toBe(-270);
     });
 
     it("should list all documents", async () => {
@@ -74,6 +97,9 @@ describe("Test Elasticsearch container", () => {
         // then
         expect(documents.length).toBe(3);
         expect(firstTransaction.id).toBe("id-3");
+        expect(firstTransaction.owner_id).toBe("ow-3");
+        expect(firstTransaction.transaction_date).toBe("2022-04-17");
+        expect(firstTransaction.amount).toBe(25);
     });
 
     it("should list documents by ownerId", async () => {
@@ -108,16 +134,19 @@ describe("Test Elasticsearch container", () => {
         expect(documents.length).toBe(2);
         expect(firstTransaction.id).toBe("id-1");
         expect(firstTransaction.owner_id).toBe(expectedOwnerId);
+        expect(firstTransaction.transaction_date).toBe("2022-02-11");
+        expect(firstTransaction.amount).toBe(-270);
+
         expect(secondTransaction.id).toBe("id-2");
         expect(secondTransaction.owner_id).toBe(expectedOwnerId);
+        expect(secondTransaction.transaction_date).toBe("2022-03-21");
+        expect(secondTransaction.amount).toBe(150);
     });
 
     it("should insert a new document", async () => {
         // given
-        const idNew = "id-new";
-
         const newTransaction = {
-            id: idNew,
+            id: "idNew",
             ownerId: "ow-3",
             transactionDate: "2022-04-19",
             amount: 99,
@@ -133,29 +162,32 @@ describe("Test Elasticsearch container", () => {
         // when
         const document = await elasticClient.get({
             index: INDEX,
-            id: idNew,
+            id: newTransaction.id,
         });
 
         const transaction = document._source;
 
         // then
         expect(transaction).toBeDefined();
-        expect(transaction.id).toBe(idNew);
-        expect(transaction.owner_id).toBe("ow-3");
-        expect(transaction.transaction_date).toBe("2022-04-19");
-        expect(transaction.amount).toBe(99);
+        expect(transaction.id).toBe(newTransaction.id);
+        expect(transaction.owner_id).toBe(newTransaction.ownerId);
+        expect(transaction.transaction_date).toBe(newTransaction.transactionDate);
+        expect(transaction.amount).toBe(newTransaction.amount);
     });
 
     it("should update by id", async () => {
         // given
         const idToUpdate = "id-1";
+        const updatedAmount = -271;
+        const updatedDate = formatDate(new Date());
 
         // when
         await elasticClient.update({
             index: INDEX,
             id: idToUpdate,
             doc: {
-                amount: -271,
+                amount: updatedAmount,
+                transaction_date: updatedDate,
             },
         });
 
@@ -169,7 +201,8 @@ describe("Test Elasticsearch container", () => {
         // then
         expect(transaction.id).toBe(idToUpdate);
         expect(transaction.owner_id).toBe("ow-1");
-        expect(transaction.amount).toBe(-271);
+        expect(transaction.amount).toBe(updatedAmount);
+        expect(transaction.transaction_date).toBe(updatedDate);
     });
 
     it("should delete by id", async () => {
