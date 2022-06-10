@@ -1,21 +1,21 @@
-const { toSnakeCase } = require("../src/utils");
+const { toSnakeCase, toCamelCase } = require("../src/utils");
 const util = require("util");
 
-describe("Test snake camel case converter", () => {
-    it("should convert simple object from camel to snake", async () => {
+describe("Test camel case to snake case converter", () => {
+    it("should convert simple object from camel to snake case", async () => {
         // given
         const expectedSnakeAccountId = "account_id";
         const expectedSnakeTotalAmount = "total_amount";
         const expectedSnakeSellingLines = "selling_lines";
 
-        const underTest = {
+        const camelObj = {
             accountId: "1",
             totalAmount: 99,
             sellingLines: [1, 2, 3],
         };
 
         // when
-        const result = toSnakeCase(underTest);
+        const result = toSnakeCase(camelObj);
 
         // then
         expect(result[expectedSnakeAccountId]).toBe("1");
@@ -24,14 +24,14 @@ describe("Test snake camel case converter", () => {
         expect(result[expectedSnakeSellingLines][2]).toBe(3);
     });
 
-    it("should convert object with nested objects from camel to snake", async () => {
+    it("should convert object with nested objects from camel to snake case", async () => {
         // given
         const expectedSnakeUserDetails = "user_details";
         const expectedSnakeEmailAddress = "email_address";
         const expectedSnakePersonalInterest = "personal_interest";
         const expectedSnakeDOB = "date_of_birth";
 
-        const underTest = {
+        const camelObj = {
             accountId: "1",
             totalAmount: 99,
             sellingLines: [1, 2, 3],
@@ -46,7 +46,7 @@ describe("Test snake camel case converter", () => {
         };
 
         // when
-        const result = toSnakeCase(underTest);
+        const result = toSnakeCase(camelObj);
 
         // then
         expect(result[expectedSnakeUserDetails]).toBeDefined();
@@ -58,47 +58,18 @@ describe("Test snake camel case converter", () => {
         expect(result[expectedSnakeUserDetails].personal[expectedSnakeDOB]).toBe("1992-07-21");
     });
 
-    it("should convert object with nested objects from camel to snake", async () => {
+    it("should convert object with nested objects from camel to snake case", async () => {
         // given
         const expectedSnakeUserDetails = "user_details";
         const expectedSnakeLanguageList = "language_list";
         const expectedSnakeLanguageName = "language_name";
 
-        const underTest = {
-            accountId: "1",
-            totalAmount: 99,
-            sellingLines: [1, 2, 3],
-            userDetails: {
-                emailAddress: "test@test.com",
-                personalInterest: ["sport", "music"],
-                personal: {
-                    city: "Rome",
-                    dateOfBirth: "1992-07-21",
-                },
-                languageList: [
-                    {
-                        languageName: "english",
-                        score: 8,
-                        nestedList: [
-                            {
-                                thisIsVeryNested: true,
-                            },
-                        ],
-                    },
-                    {
-                        languageName: "spanish",
-                        score: 6,
-                    },
-                    "test-string",
-                    101,
-                ],
-            },
-        };
+        const camelObj = getCamelCaseObject();
 
         // when
-        console.log(util.inspect(underTest, { depth: null }));
-        const result = toSnakeCase(underTest);
-        console.log(util.inspect(result, { depth: null }));
+        //console.log(util.inspect(camelObj, { depth: null }));
+        const result = toSnakeCase(camelObj);
+        //console.log(util.inspect(result, { depth: null }));
 
         // then
         expect(result[expectedSnakeUserDetails]).toBeDefined();
@@ -110,31 +81,14 @@ describe("Test snake camel case converter", () => {
         expect(result.user_details.language_list[0].nested_list[0].this_is_very_nested).toBeTruthy();
     });
 
-    it("should convert array with nested mixed elements from camel to snake", async () => {
+    it("should convert array with nested mixed elements from camel to snake case", async () => {
         // given
-        underTest = [
-            {
-                mainCity: "Rome",
-                dateOfBirth: "1992-07-21",
-                nestedOne: {
-                    nestedTwo: true,
-                    nestedThree: [1, { nestedFour: true }],
-                },
-            },
-            {
-                mainCity: "Milan",
-                dateOfBirth: "1988-05-10",
-                nestedArray: [3, 4, 5],
-            },
-            200,
-            "test-string",
-            [1, 2, 3, { nestedObj: "yes" }],
-        ];
+        camelArray = getCamelCaseArray();
 
         // when
-        console.log(util.inspect(underTest, { depth: null }));
-        const result = toSnakeCase(underTest);
-        console.log(util.inspect(result, { depth: null }));
+        //console.log(util.inspect(camelArray, { depth: null }));
+        const result = toSnakeCase(camelArray);
+        //console.log(util.inspect(result, { depth: null }));
 
         // then
         expect(result[0].date_of_birth).toBe("1992-07-21");
@@ -148,3 +102,87 @@ describe("Test snake camel case converter", () => {
         expect(result[4][3].nested_obj).toBe("yes");
     });
 });
+
+describe("Test camel case to snake case converter", () => {
+    it("should convert object with nested objects from snake to camel case", async () => {
+        // given
+        const camelObj = getCamelCaseObject();
+        const snakeObj = toSnakeCase(camelObj);
+
+        // when
+        const result = toCamelCase(snakeObj);
+
+        // then
+        expect(result).toStrictEqual(camelObj)
+    });
+
+    it("should convert array with nested mixed elements from camel to snake case", async () => {
+        // given
+        const cameArray = getCamelCaseArray();
+        const snakeObj = toSnakeCase(cameArray);
+
+        // when
+        const result = toCamelCase(snakeObj);
+
+        // then
+        expect(result).toStrictEqual(cameArray)
+    });
+});
+
+const getCamelCaseObject = () => {
+    const camelObj = {
+        accountId: "1",
+        totalAmount: 99,
+        sellingLines: [1, 2, 3],
+        userDetails: {
+            emailAddress: "test@test.com",
+            personalInterest: ["sport", "music"],
+            personal: {
+                city: "Rome",
+                dateOfBirth: "1992-07-21",
+            },
+            languageList: [
+                {
+                    languageName: "english",
+                    score: 8,
+                    nestedList: [
+                        {
+                            thisIsVeryNested: true,
+                        },
+                    ],
+                },
+                {
+                    languageName: "spanish",
+                    score: 6,
+                },
+                "test-string",
+                101,
+            ],
+        },
+    };
+
+    return camelObj;
+};
+
+const getCamelCaseArray = () => {
+    const camelArray = [
+        {
+            mainCity: "Rome",
+            dateOfBirth: "1992-07-21",
+            nestedOne: {
+                nestedTwo: true,
+                nestedThree: [1, { nestedFour: true }],
+            },
+        },
+        {
+            mainCity: "Milan",
+            dateOfBirth: "1988-05-10",
+            nestedArray: [3, 4, 5],
+        },
+        200,
+        "test-string",
+        [1, 2, 3, { nestedObj: "yes" }],
+    ];
+
+    return camelArray;
+};
