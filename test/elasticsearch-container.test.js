@@ -20,6 +20,7 @@ beforeAll(async () => {
 afterAll(async () => {
     try {
         await clearElasticData();
+        await elasticClient.close();
     } catch (e) {
         console.log(e);
     }
@@ -44,15 +45,15 @@ describe.skip("Test Elasticsearch container", () => {
             index: INDEX,
         });
 
-        console.log(util.inspect(mapping, { depth: null }));
+        //console.log(util.inspect(mapping, { depth: null }));
         const properties = mapping[INDEX].mappings.properties;
-        
+
         // then
-        expect(properties.id.type).toBe("text")
-        expect(properties.description.type).toBe("text")
-        expect(properties.amount.type).toBe("long")
-        expect(properties.owner_id.type).toBe("text")
-        expect(properties.transaction_date.type).toBe("date")
+        expect(properties.id.type).toBe("text");
+        expect(properties.description.type).toBe("text");
+        expect(properties.amount.type).toBe("long");
+        expect(properties.owner_id.type).toBe("text");
+        expect(properties.transaction_date.type).toBe("date");
     });
 
     it("should get by id", async () => {
@@ -227,21 +228,21 @@ describe.skip("Test Elasticsearch container", () => {
 });
 
 const setUpElasticData = async () => {
-    const transactions = JSON.parse(loadElasticInitFile());
-    const snakeCaseTransactions = toSnakeCase(transactions);
+    const documents = JSON.parse(loadElasticInitFile());
+    const snakeCaseDocuments = toSnakeCase(documents);
 
-    for (const t of snakeCaseTransactions) {
+    for (const d of snakeCaseDocuments) {
         await elasticClient.index({
             index: INDEX,
-            id: t.id,
-            document: t,
+            id: d.id,
+            document: d,
         });
     }
 };
 
 const loadElasticInitFile = () => {
-    const jsonInitFile = fs.readFileSync(path.join(__dirname, "setup/init-files/init-elastic.json"), "utf8");
-    return jsonInitFile;
+    const initDataJson = fs.readFileSync(path.join(__dirname, "setup/init-files/init-data-elastic.json"), "utf8");
+    return initDataJson;
 };
 
 const clearElasticData = async () => {
