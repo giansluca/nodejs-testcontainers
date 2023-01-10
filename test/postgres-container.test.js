@@ -2,7 +2,6 @@ const { getPostgresClient } = require("./setup/postgres-setup");
 const { types } = require("pg");
 const fs = require("fs");
 const path = require("path");
-const { resolve6 } = require("dns");
 
 let postgresClient;
 

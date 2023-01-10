@@ -2,7 +2,6 @@ const { getElasticClient } = require("./setup/elasticsearch-setup");
 const { sleep, formatDate, toSnakeCase } = require("../src/utils");
 const fs = require("fs");
 const path = require("path");
-const util = require("util");
 
 const INDEX = "test-index";
 let elasticClient;
@@ -26,7 +25,7 @@ afterAll(async () => {
     }
 });
 
-describe.skip("Test Elasticsearch container", () => {
+describe("Test Elasticsearch container", () => {
     it("should check index has been created", async () => {
         // given
         // when

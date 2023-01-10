@@ -2,7 +2,7 @@ const { elasticStart } = require("./elasticsearch-setup");
 const { postgresStart } = require("./postgres-setup");
 
 module.exports = async () => {
-    //await startElasticsearch();
+    await startElasticsearch();
     await startPostgres();
 };
 
