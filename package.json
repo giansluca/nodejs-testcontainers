@@ -13,15 +13,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^8.16.0",
-    "jest": "^28.1.0",
-    "prettier": "^2.6.2",
-    "testcontainers": "^8.10.1"
+    "eslint": "^8.33.0",
+    "jest": "^29.4.1",
+    "prettier": "^2.8.3",
+    "testcontainers": "^9.1.1"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "^8.2.1",
-    "dotenv": "^16.0.1",
+    "@elastic/elasticsearch": "^8.6.0",
+    "dotenv": "^16.0.3",
     "lodash": "^4.17.21",
-    "pg": "^8.7.3"
+    "pg": "^8.9.0"
   }
 }
