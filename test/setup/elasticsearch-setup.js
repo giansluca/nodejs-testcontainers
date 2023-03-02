@@ -14,7 +14,7 @@ const elasticStart = async () => {
 
 const getElasticClient = () => {
     const clientConfig = {
-        node: process.env._ELASTICSEARCH_URL,
+        node: process.env.ELASTICSEARCH_URL,
         auth: null,
         ssl: false,
     };

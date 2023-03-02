@@ -8,7 +8,7 @@ const postgresStart = async () => {
 
 const getPostgresClient = () => {
     types.setTypeParser(1700, (x) => parseFloat(x));
-    return new Client(process.env._POSTGRES_URL);
+    return new Client(process.env.POSTGRES_URL);
 };
 
 module.exports = { postgresStart, getPostgresClient };
