@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "jest ./test",
+        "test": "jest ./test --detectOpenHandles",
         "coverage": "rm -rf coverage && jest ./test --coverage",
         "lint": "eslint src",
         "start": "node index.js"
