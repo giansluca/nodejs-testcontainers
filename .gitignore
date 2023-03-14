@@ -95,5 +95,7 @@ appsettings.json
 local.settings.json
 swagger.json
 
+.DS_STORE
+
 .idea/
 .vscode/
