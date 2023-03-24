@@ -7,13 +7,13 @@ const pkg = require("../package");
 const config = {
     env: process.env.ENV || "local",
     app: {
-        name: process.env.APP_NAME || "NodeDemo",
+        name: process.env.APP_NAME || "nodejs-testcontainers",
         version: pkg.version,
-        commit: process.env.APP_COMMIT
+        commit: process.env.APP_COMMIT,
     },
     utils: {
-        testUrl: process.env.TEST_URL
-    }
+        testUrl: process.env.TEST_URL,
+    },
 };
 
 module.exports = config;
