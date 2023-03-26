@@ -12,7 +12,7 @@ const config = {
         commit: process.env.APP_COMMIT,
     },
     utils: {
-        testUrl: process.env.TEST_URL,
+        jokeUrl: process.env.JOKE_URL,
     },
 };
 

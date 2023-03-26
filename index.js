@@ -1,3 +1,5 @@
 const { startApp } = require("./src/start");
 
-startApp();
+(async function main() {
+    await startApp();
+})();

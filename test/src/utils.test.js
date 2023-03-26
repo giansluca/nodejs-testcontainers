@@ -1,5 +1,4 @@
-const { toSnakeCase, toCamelCase } = require("../src/utils");
-const util = require("util");
+const { toSnakeCase, toCamelCase } = require("../../src/utils");
 
 describe("Test camel case to snake case converter", () => {
     it("should convert simple object from camel to snake case", async () => {
@@ -113,7 +112,7 @@ describe("Test camel case to snake case converter", () => {
         const result = toCamelCase(snakeObj);
 
         // then
-        expect(result).toStrictEqual(camelObj)
+        expect(result).toStrictEqual(camelObj);
     });
 
     it("should convert array with nested mixed elements from camel to snake case", async () => {
@@ -125,7 +124,7 @@ describe("Test camel case to snake case converter", () => {
         const result = toCamelCase(snakeObj);
 
         // then
-        expect(result).toStrictEqual(cameArray)
+        expect(result).toStrictEqual(cameArray);
     });
 });
 
