@@ -1,6 +1,7 @@
 const { startApp } = require("../../src/start");
+const { Joke } = require("../../src/model/joke");
 
-const mockGetJoke = jest.fn().mockReturnValue({ setup: "test-1", delivery: "test:2" });
+const mockGetJoke = jest.fn();
 jest.mock("../../src/jokeClient", () => {
     return {
         JokeClient: jest.fn().mockImplementation(() => {
@@ -9,8 +10,25 @@ jest.mock("../../src/jokeClient", () => {
     };
 });
 
+beforeEach(() => {
+    jest.clearAllMocks();
+});
+
 describe("Test Start", () => {
-    it("should pass", async () => {
-        await startApp();
+    it("should get the joke and transform the delivery in uppercase", async () => {
+        // given
+        mockGetJoke.mockReturnValue(new Joke("is this a joke?", "yes!"));
+
+        // when
+        const joke = await startApp();
+        console.log(joke);
+
+        const setupContainsLowercase = /[a-z]/.test(joke.setup);
+        const deliveryContainsLowercase = /[a-z]/.test(joke.delivery);
+
+        // then
+        expect(joke).toBeDefined();
+        expect(setupContainsLowercase).toBeTruthy();
+        expect(deliveryContainsLowercase).toBeFalsy();
     });
 });

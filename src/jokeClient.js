@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { Joke } = require("./model/joke");
 
 class JokeClient {
     constructor(jokeUrl) {
@@ -11,13 +12,6 @@ class JokeClient {
     }
 }
 
-class Joke {
-    constructor(setup, delivery) {
-        (this.setup = setup), (this.delivery = delivery);
-    }
-}
-
 module.exports = {
-    Joke: Joke,
     JokeClient: JokeClient,
 };

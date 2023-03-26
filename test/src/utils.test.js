@@ -82,7 +82,7 @@ describe("Test camel case to snake case converter", () => {
 
     it("should convert array with nested mixed elements from camel to snake case", async () => {
         // given
-        camelArray = getCamelCaseArray();
+        const camelArray = getCamelCaseArray();
 
         // when
         //console.log(util.inspect(camelArray, { depth: null }));

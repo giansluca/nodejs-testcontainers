@@ -216,7 +216,7 @@ describe("Test Elasticsearch container", () => {
 
         // then
         try {
-            const document = await elasticClient.get({
+            await elasticClient.get({
                 index: INDEX,
                 id: idToDelete,
             });
