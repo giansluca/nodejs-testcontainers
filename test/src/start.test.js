@@ -1,4 +1,4 @@
-const { startApp } = require("../../src/start");
+const { getJoke, getPoundValueOf } = require("../../src/start");
 const { Joke } = require("../../src/model/joke");
 
 const mockGetJoke = jest.fn();
@@ -10,6 +10,11 @@ jest.mock("../../src/jokeClient", () => {
     };
 });
 
+const mockGetPoundValueOf = jest.fn();
+jest.mock("../../src/exchangeRateClient", () => ({
+    getRatesOf: () => mockGetPoundValueOf(),
+}));
+
 beforeEach(() => {
     jest.clearAllMocks();
 });
@@ -20,7 +25,7 @@ describe("Test Start", () => {
         mockGetJoke.mockReturnValue(new Joke("is this a joke?", "yes!"));
 
         // when
-        const joke = await startApp();
+        const joke = await getJoke();
         console.log(joke);
 
         const setupContainsLowercase = /[a-z]/.test(joke.setup);
@@ -30,5 +35,16 @@ describe("Test Start", () => {
         expect(joke).toBeDefined();
         expect(setupContainsLowercase).toBeTruthy();
         expect(deliveryContainsLowercase).toBeFalsy();
+    });
+
+    it("should convert from euro to pound", async () => {
+        // given
+        mockGetPoundValueOf.mockReturnValue({ GBP: 0.8 });
+
+        // when
+        const poundAmount = await getPoundValueOf(15.4, "EUR");
+
+        // then
+        expect(poundAmount).toBe("£12.32");
     });
 });

@@ -1,4 +1,4 @@
-const { toSnakeCase, toCamelCase } = require("../../src/utils");
+const { toSnakeCase, toCamelCase, containsNumbers } = require("../../src/utils");
 
 describe("Test camel case to snake case converter", () => {
     it("should convert simple object from camel to snake case", async () => {
@@ -125,6 +125,21 @@ describe("Test camel case to snake case converter", () => {
 
         // then
         expect(result).toStrictEqual(cameArray);
+    });
+});
+
+describe("Test if string contains numbers", () => {
+    it.each([
+        ["hello", false],
+        ["cAr", false],
+        ["boss3", true],
+        ["9999", true],
+    ])("when the input is: '%s' expect: '%s'", (text, expected) => {
+        // given - when
+        const result = containsNumbers(text);
+
+        // then
+        expect(result).toBe(expected);
     });
 });
 

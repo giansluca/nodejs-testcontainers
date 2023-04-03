@@ -7,8 +7,12 @@ class JokeClient {
     }
 
     async getJoke() {
-        const { data } = await axios.get(`${this.jokeUrl}?amount=1&type=twopart`);
-        return new Joke(data.setup, data.delivery);
+        try {
+            const { data } = await axios.get(`${this.jokeUrl}?amount=1&type=twopart`);
+            return new Joke(data.setup, data.delivery);
+        } catch (e) {
+            console.log(e);
+        }
     }
 }
 

@@ -1,20 +1,20 @@
 const _ = require("lodash");
 
-const sleep = (ms) => {
+function sleep(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
-};
+}
 
-const formatDate = (date) => {
+function formatDate(date) {
     return [date.getFullYear(), _padTo2Digits(date.getMonth() + 1), _padTo2Digits(date.getDate())].join("-");
-};
+}
 
-const _padTo2Digits = (num) => {
+function _padTo2Digits(num) {
     return num.toString().padStart(2, "0");
-};
+}
 
-const toSnakeCase = (obj) => {
+function toSnakeCase(obj) {
     let result;
     if (_.isArray(obj)) {
         result = [];
@@ -37,9 +37,9 @@ const toSnakeCase = (obj) => {
     } else throw new Error("It should never gets here!");
 
     return result;
-};
+}
 
-const toCamelCase = (obj) => {
+function toCamelCase(obj) {
     let result;
     if (_.isArray(obj)) {
         result = [];
@@ -62,6 +62,16 @@ const toCamelCase = (obj) => {
     } else throw new Error("It should never gets here!");
 
     return result;
-};
+}
 
-module.exports = { sleep, formatDate, toSnakeCase, toCamelCase };
+function containsNumbers(text) {
+    return /[0-9]/.test(text);
+}
+
+module.exports = {
+    sleep: sleep,
+    formatDate: formatDate,
+    toSnakeCase: toSnakeCase,
+    toCamelCase: toCamelCase,
+    containsNumbers: containsNumbers,
+};
