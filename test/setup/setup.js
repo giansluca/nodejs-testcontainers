@@ -17,7 +17,7 @@ const startElasticsearch = async () => {
 
 const startPostgres = async () => {
     const postgresDb = await postgresStart();
-    postgresUrl = `postgres://${postgresDb.getUsername()}:${postgresDb.getPassword()}@${postgresDb.getHost()}:${postgresDb.getPort()}/${postgresDb.getDatabase()}`;
+    const postgresUrl = `postgres://${postgresDb.getUsername()}:${postgresDb.getPassword()}@${postgresDb.getHost()}:${postgresDb.getPort()}/${postgresDb.getDatabase()}`;
 
     process.env.POSTGRES_URL = postgresUrl;
     global._postgresDb = postgresDb;
