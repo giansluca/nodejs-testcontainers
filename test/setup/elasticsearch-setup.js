@@ -1,4 +1,4 @@
-const { ElasticsearchContainer } = require("testcontainers");
+const { ElasticsearchContainer } = require("@testcontainers/elasticsearch");
 const { Client } = require("@elastic/elasticsearch");
 
 const elasticStart = async () => {

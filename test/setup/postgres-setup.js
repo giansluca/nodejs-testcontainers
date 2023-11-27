@@ -1,4 +1,4 @@
-const { PostgreSqlContainer } = require("testcontainers");
+const { PostgreSqlContainer } = require("@testcontainers/postgresql");
 const { types, Client } = require("pg");
 
 const postgresStart = async () => {
