@@ -2,7 +2,7 @@ const { ElasticsearchContainer } = require("@testcontainers/elasticsearch");
 const { Client } = require("@elastic/elasticsearch");
 
 const elasticStart = async () => {
-    const elasticsearchDb = await new ElasticsearchContainer("elasticsearch:8.6.1")
+    const elasticsearchDb = await new ElasticsearchContainer("elasticsearch:9.3.1")
         .withEnvironment({
             "discovery.type": "single-node",
             "xpack.security.enabled": "false",

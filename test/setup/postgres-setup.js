@@ -2,7 +2,7 @@ const { PostgreSqlContainer } = require("@testcontainers/postgresql");
 const { types, Client } = require("pg");
 
 const postgresStart = async () => {
-    const postgresDb = await new PostgreSqlContainer("postgres:15.1").start();
+    const postgresDb = await new PostgreSqlContainer("postgres:18.3").start();
     return postgresDb;
 };
 
